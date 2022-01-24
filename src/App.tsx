@@ -1,45 +1,25 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useState } from "react";
+import { Canvas } from "react-three-fiber";
+import Box from "./components/box";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      This is example
+      <Canvas
+        camera={{
+          near: 0.1,
+          far: 1000,
+          zoom: 1,
+        }}
+      >
+        fog
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} />
+        <Box position={[1, 0, 0]} />
+      </Canvas>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

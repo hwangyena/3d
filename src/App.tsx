@@ -10,18 +10,7 @@ function App() {
       </video> */}
       {/* <Canvas> */}
       <Canvas orthographic linear>
-        {/* <OrbitControls
-          addEventListener={undefined}
-          hasEventListener={undefined}
-          removeEventListener={undefined}
-          dispatchEvent={undefined}
-        /> */}
-
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 15]} />
         <Video />
-        {/* <Box position={[1, 0, 0]} />
-        <Plane position={[1, 0, 0]} /> */}
       </Canvas>
     </div>
   );

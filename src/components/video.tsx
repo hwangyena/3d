@@ -1,22 +1,30 @@
 import { useAspect } from "@react-three/drei";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { MeshProps, useFrame, useThree } from "react-three-fiber";
 
 interface Props {}
 
 const Video = ({}: Props) => {
-  const size = useAspect(1800, 1000); //비율주기
+  const { mouse } = useThree();
+  const size = useAspect(1000, 1000); //비율주기
+  const ref = useRef<MeshProps>();
 
   const [video] = useState(() => {
     const vid = document.createElement("video");
     vid.src = "/public/car.mp4";
     vid.crossOrigin = "Anonymous";
     vid.loop = true;
+    vid.autoplay = true;
+    vid.muted = true;
     return vid;
   });
 
-  useEffect(() => void video.play(), [video]);
+  useEffect(() => {
+    if (video) void video.play();
+  }, [video]);
+
   return (
-    <mesh scale={size}>
+    <mesh scale={size} ref={ref}>
       <planeBufferGeometry />
       <meshBasicMaterial>
         <videoTexture attach="map" args={[video]} />

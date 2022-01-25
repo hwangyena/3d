@@ -5,7 +5,7 @@ import Box from "./components/box";
 function App() {
   return (
     <div className="App">
-      This is example
+      This is example~
       <Canvas
         camera={{
           near: 0.1,
@@ -13,7 +13,7 @@ function App() {
           zoom: 1,
         }}
       >
-        fog
+        foggg
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <Box position={[1, 0, 0]} />

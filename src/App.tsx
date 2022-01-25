@@ -1,22 +1,24 @@
-import { useState } from "react";
+import { OrbitControls, Stars } from "@react-three/drei";
 import { Canvas } from "react-three-fiber";
 import Box from "./components/box";
+import Plane from "./components/plane";
+import "./styles/global.css";
 
 function App() {
   return (
     <div className="App">
-      This is example~
-      <Canvas
-        camera={{
-          near: 0.1,
-          far: 1000,
-          zoom: 1,
-        }}
-      >
-        foggg
+      <Canvas>
+        <OrbitControls
+          addEventListener={undefined}
+          hasEventListener={undefined}
+          removeEventListener={undefined}
+          dispatchEvent={undefined}
+        />
+        <Stars />
         <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[10, 10, 15]} />
         <Box position={[1, 0, 0]} />
+        <Plane position={[1, 0, 0]} />
       </Canvas>
     </div>
   );

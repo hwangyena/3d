@@ -9,16 +9,15 @@ import {
 
 const Box = (props: MeshProps) => {
   const mesh = useRef<any>();
-  const [active, setActive] = useState(false);
 
-  useFrame(
-    () => (mesh.current.rotation.y += 0.01) //0.01초 마다 위치 변경
-  );
+  // useFrame(
+  //   () => (mesh.current.rotation.y += 0.01) //0.01초 마다 위치 변경
+  // );
 
   return (
-    <mesh {...props} ref={mesh}>
-      <boxGeometry args={[1, 2, 3]} />
-      <meshStandardMaterial color="#008cff" />
+    <mesh {...props} ref={mesh} position={[0, 1, 0]}>
+      <boxBufferGeometry attach="geometry" />
+      <meshStandardMaterial color="#008cff" attach="material" />
     </mesh>
   );
 };

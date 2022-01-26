@@ -1,21 +1,22 @@
 import { CSSProperties } from "@emotion/serialize";
 import styled from "@emotion/styled";
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { useFrame } from "react-three-fiber";
 
 const Wrapper = styled.div`
-  --x-pos: 0;
-  --y-pos: 0;
-
-  width: 30px;
-  height: 30px;
-  z-index: 99999;
-  /* transform: translate(-50%, -50%); */
+  width: 40px;
+  height: 40px;
+  border: 2px solid blue;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: #fff;
   position: absolute;
   pointer-events: none;
+  color: transparent;
   left: var(--x-pos);
   top: var(--y-pos);
+
+  /* left: var(--x-pos) + "px";
+  top: var(--y-pos) + "px"; */
 `;
 
 // interface Props {
@@ -24,7 +25,6 @@ const Wrapper = styled.div`
 
 /** 그냥 따라다니는 기본 mouse cursor */
 const Mouse = () => {
-  // const Mouse = ({ children }: Props) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const onMouseMove = (event: MouseEvent) => {
     const { pageX: x, pageY: y } = event;

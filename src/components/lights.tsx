@@ -1,49 +1,44 @@
-import { useEffect, useRef } from "react";
+import { Ring } from "@react-three/drei";
+import { useEffect, useRef, useState } from "react";
 import { SpotLightProps, useFrame, useThree } from "react-three-fiber";
 import * as THREE from "three";
+import { Texture, Vector3 } from "three";
 
 function Lights() {
   const cursor = useRef<SpotLightProps>(null);
-  const { camera, mouse } = useThree();
-  // const vec = new THREE.Vector3();
-
-  // const onMouseMove = (event: MouseEvent) => {
-  //   const { pageX: x, pageY: y } = event;
-  //   if (cursor.current) {
-  //     cursor.current.position = new THREE.Vector3(x, y, 0);
-  //     // setMousePosition({ x, y });
-  //   }
-  //   event.stopPropagation();
-  // };
 
   useFrame(({ mouse, camera }) => {
     if (cursor.current && cursor.current.position) {
-      // cursor.current.position.lerp(new THREE.Vector3(1, 1, 1), 0.4);
+      // @ts-ignore
       cursor.current.position.lerp(
-        new THREE.Vector3(mouse.x * 350, mouse.y * 450, 0), //현재위치 넣어주면 움직일 거 같은데
+        new THREE.Vector3(
+          (mouse.x * window.innerWidth) / 2,
+          (mouse.y * window.innerHeight) / 2,
+          0
+        ),
         1
       );
-      // cursor.current.position.x = lerp(
-      //   cursor.current.position.x,
-      //   mouse.x * 12,
-      //   0.4
-      // );
-      // cursor.current.position.y = lerp(
-      //   cursor.current.position.y,
-      //   7 + mouse.y * 4,
-      //   0.4
-      // );
-      // cursor.current.position.x = THREE.MathUtils.
-      // cursor.current.position.y = lerp(cursor.current.position.y, 7 + mouse.y * 4, 0.4)
-      // .unproject(camera);
     }
   });
 
   return (
     <>
       <mesh ref={cursor}>
-        <planeGeometry attach="geometry" args={[50, 50]} />
-        <meshBasicMaterial color="pink" />
+        <ringBufferGeometry args={[40, 200, 50]} />
+        {/* <planeGeometry attach="geometry" args={[50, 50]} /> */}
+        <meshBasicMaterial
+          attach="material"
+          opacity={0.5}
+          color="pink"
+          alphaMap={new THREE.TextureLoader().load("public/alpha-1.png")}
+          side={THREE.DoubleSide}
+          alphaTest={0.2}
+
+          // blending={THREE.CustomBlending}
+          // blendEquation={THREE.AddEquation}
+          // transparent={true}
+        />
+        {/* <meshBasicMaterial attach="material" color="blue" /> */}
       </mesh>
     </>
   );

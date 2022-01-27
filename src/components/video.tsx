@@ -10,12 +10,9 @@ const Video = ({}: Props) => {
   const size = useAspect(1000, 1000); //비율주기
   const ref = useRef<MeshProps>();
 
-  const targetX = 0;
-  const targetY = 0;
-
-  const lerp = (start: number, end: number, t: number) => {
-    return start * (1 - t) + end * t;
-  };
+  // const lerp = (start: number, end: number, t: number) => {
+  //   return start * (1 - t) + end * t;
+  // };
 
   const [video] = useState(() => {
     const vid = document.createElement("video");
@@ -24,7 +21,6 @@ const Video = ({}: Props) => {
     vid.loop = true;
     vid.autoplay = true;
     vid.muted = true;
-    vid.className = "video";
     return vid;
   });
 

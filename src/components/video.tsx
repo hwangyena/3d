@@ -3,10 +3,26 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MeshProps, useFrame, useThree } from "react-three-fiber";
 import * as THREE from "three";
 
-import fragment from "../shader/fragment.glsl?raw";
-import vertex from "../shader/vertex.glsl?raw";
+import fragment from "../shader/material/fragment.glsl?raw";
+import vertex from "../shader/material/vertex.glsl?raw";
 
-const EffectObject = () => {
+const Video = () => {
+  const size = useAspect(1000, 1000); //비율주기
+  const ref = useRef<MeshProps>();
+  const mouse = useRef(new THREE.Vector2());
+
+  /** video texture */
+  const [video] = useState(() => {
+    const vid = document.createElement("video");
+    vid.src = "/public/car.mp4";
+    vid.crossOrigin = "Anonymous";
+    vid.loop = true;
+    vid.autoplay = true;
+    vid.muted = true;
+    return vid;
+  });
+
+  /** shader */
   const shaderData: THREE.ShaderMaterialParameters = useMemo(
     () => ({
       uniforms: {
@@ -27,41 +43,23 @@ const EffectObject = () => {
     }),
     []
   );
-  return (
-    <mesh>
-      <planeBufferGeometry />
-      <shaderMaterial
-        {...shaderData}
-        extensions={{
-          // derivatives: "#extension GL_OES_standard_derivatives : enable", //?
-          derivatives: true, //?
-          fragDepth: false,
-          drawBuffers: false,
-          shaderTextureLOD: false,
-        }}
-      />
-    </mesh>
-  );
-};
-
-const Video = () => {
-  const size = useAspect(1000, 1000); //비율주기
-  const ref = useRef<MeshProps>();
-  const mouse = useRef(new THREE.Vector2());
-
-  const [video] = useState(() => {
-    const vid = document.createElement("video");
-    vid.src = "/public/car.mp4";
-    vid.crossOrigin = "Anonymous";
-    vid.loop = true;
-    vid.autoplay = true;
-    vid.muted = true;
-    return vid;
-  });
 
   useFrame(({ mouse }) => {
     mouse.x = (mouse.x * window.innerWidth) / 2;
     mouse.y = (mouse.y * window.innerHeight) / 2;
+
+    //shadow 우선 제외해보기
+    // if (shaderData.uniforms) {
+    //   shaderData.uniforms.resolution.value.x = 100;
+    //   shaderData.uniforms.resolution.value.y = 100;
+    //   shaderData.uniforms.resolution.value.z = 1;
+    //   shaderData.uniforms.resolution.value.w = 2;
+    //   shaderData.uniforms.progress.value = 0;
+    //   shaderData.uniforms.angle.value = 0.3;
+
+    //   shaderData.uniforms.texture1.value = video;
+    //   shaderData.uniforms.texture1.value.needsUpdate = true;
+    // }
   });
 
   useEffect(() => {
@@ -83,3 +81,14 @@ const Video = () => {
 };
 
 export default Video;
+
+// <shaderMaterial
+// {...shaderData}
+// extensions={{
+//   // derivatives: "#extension GL_OES_standard_derivatives : enable", //?
+//   derivatives: true, //?
+//   fragDepth: false,
+//   drawBuffers: false,
+//   shaderTextureLOD: false,
+// }}
+// ></shaderMaterial>

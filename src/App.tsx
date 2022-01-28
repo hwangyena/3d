@@ -12,7 +12,7 @@ function App() {
       </video> */}
       <h1>Hello! This is example.</h1>
       <Canvas orthographic linear>
-        <Effect />
+        {/* <Effect /> */}
         {/* <fog attach="fog" args={["black", 0, 20]} />      */}
         <Video />
       </Canvas>

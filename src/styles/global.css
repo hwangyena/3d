@@ -26,6 +26,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  overflow: auto;
 }
 
 .video {
@@ -33,19 +34,6 @@ body {
   width: 100%;
   filter: grayscale(1);
 }
-
-/* .mask {
-  background: radial-gradient(
-      circle 20px at var(--x-pos, 0) var(--y-pos, 0),
-      #fff 99%,
-      black 100%
-    )
-    fixed;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-} */
 
 p {
   color: #fff;

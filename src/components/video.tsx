@@ -11,7 +11,39 @@ import postVertex from "../shader/post/vertex.glsl?raw";
 
 // import fragment from "../shader/material/fragment.glsl?raw";
 // import vertex from "../shader/material/vertex.glsl?raw";
-import { Vector2 } from "three";
+
+const myEffect = {
+  uniforms: {
+    tDiffuse: { value: null },
+    resolution: {
+      value: new THREE.Vector2(1, window.innerHeight / window.innerWidth),
+    },
+    uMouse: { value: new THREE.Vector2(-10, -10) },
+    uVelo: { value: 0 },
+  },
+  vertexShader: `varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0 );}`,
+  fragmentShader: `uniform float time;
+        uniform sampler2D tDiffuse;
+        uniform vec2 resolution;
+        varying vec2 vUv;
+        uniform vec2 uMouse;
+        float circle(vec2 uv, vec2 disc_center, float disc_radius, float border_size) {
+          uv -= disc_center;
+          uv*=resolution;
+          float dist = sqrt(dot(uv, uv));
+          return smoothstep(disc_radius+border_size, disc_radius-border_size, dist);
+        }
+        void main()  {
+            vec2 newUV = vUv;
+            float c = circle(vUv, uMouse, 0.0, 0.2);
+            float r = texture2D(tDiffuse, newUV.xy += c * (0.1 * .5)).x;
+            float g = texture2D(tDiffuse, newUV.xy += c * (0.1 * .525)).y;
+            float b = texture2D(tDiffuse, newUV.xy += c * (0.1 * .55)).z;
+            vec4 color = vec4(r, g, b, 1.);
+
+            gl_FragColor = color;
+        }`,
+};
 
 extend({ EffectComposer, RenderPass, ShaderPass });
 
@@ -27,6 +59,9 @@ const Video = () => {
   const targetSpeed = useRef(0);
   const followMouse = useRef(new THREE.Vector2());
   const prevMouse = useRef(new THREE.Vector2());
+
+  //mouse event
+  const uMouse = useRef(new THREE.Vector2());
 
   /** custom effect */
   const uniform = useMemo(
@@ -119,30 +154,36 @@ const Video = () => {
 
   return (
     <>
-      <effectComposer ref={composer} args={[gl]}>
-        <renderPass attachArray="passes" scene={scene} camera={camera} />
+      <effectComposer ref={composer.current} args={[gl]}>
+        <renderPass scene={scene} camera={camera} />
         <shaderPass
-          attachArray="passes"
+          // attachArray="passes"
           renderToScreen
-          args={[
-            {
-              uniforms: uniform,
-              vertexShader: postVertex,
-              fragmentShader: postFragment,
-            },
-          ]}
+          args={[myEffect]}
+          // args={[
+          //   {
+          //     uniforms: uniform,
+          //     vertexShader: postVertex,
+          //     fragmentShader: postFragment,
+          //   },
+          // ]}
         />
       </effectComposer>
-      <group>
-        <mesh scale={useAspect(1000, 1000)} ref={ref}>
-          {/* <mesh scale={size} ref={ref} onPointerMove={onMove}> */}
-          <planeBufferGeometry />
-          <meshBasicMaterial>
-            <videoTexture attach="map" args={[video]} />
-          </meshBasicMaterial>
-        </mesh>
-        {/* <Lights /> */}
-      </group>
+      {/* <mesh scale={size} ref={ref} onPointerMove={onMove}> */}
+      <mesh
+        scale={useAspect(1000, 1000)}
+        ref={ref}
+        onPointerMove={(e) => {
+          uMouse.current.x = e.spaceX / window.innerWidth;
+          uMouse.current.y = e.spaceY / window.innerHeight;
+        }}
+      >
+        <planeBufferGeometry />
+        <meshBasicMaterial>
+          <videoTexture attach="map" args={[video]} />
+        </meshBasicMaterial>
+      </mesh>
+      {/* <Lights /> */}
     </>
   );
 };
